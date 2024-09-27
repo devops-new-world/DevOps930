@@ -5,11 +5,11 @@ on:
     branches:
       - main
       - develop
-      - cicd/grishma
+      - grishma
 jobs:
   docker_build_push:
     runs-on: ubuntu-latest
-    environment: cicd/grishma
+    environment: grishma
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
