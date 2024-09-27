@@ -1,39 +1,26 @@
-name: sample work flow file
+---
+name: Docker build and deploy
 on:
   push:
     branches:
-      - "**"
-
+      - main
+      - develop
+      - cicd/deepak
 jobs:
-  hello-word:
+  docker_build_push:
     runs-on: ubuntu-latest
+    environment: cicd/deepak
     steps:
-      - uses: actions/checkout@v4
-      - run: echo "Hello world"
-  install-python:
-    runs-on: ubuntu-latest
-    needs:
-      - hello-word
-    steps:
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Docker build
+        run: |
+          echo "Building Docker images"
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/dockerlab630 .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          python-version: '3.10' 
-      - run: python3 --version
-  good-bye:
-    runs-on: ubuntu-latest
-    needs:
-      - install-nodejs
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "bye-bye"
-  install-nodejs:
-    runs-on: ubuntu-latest
-    needs:
-      - hello-word
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: check node version
-        run: node -v
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push Images
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/dockerlab630
