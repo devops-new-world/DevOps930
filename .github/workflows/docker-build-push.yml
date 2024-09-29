@@ -16,7 +16,7 @@ jobs:
      - name: Docker build
        run: |
          echo "Building Docker images"
-         docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPO }}
+         docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
      - name: Login to Docker Hub
 
 
@@ -25,4 +25,4 @@ jobs:
          username: ${{ vars.DOCKERHUB_USERNAME }}
          password: ${{ secrets.DOCKERHUB_TOKEN }}
      - name: Push Images
-       run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPO }}
+       run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
