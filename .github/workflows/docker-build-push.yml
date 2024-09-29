@@ -5,22 +5,22 @@ on:
     branches:
       - main
       - develop
-      - grishma
+      - cicd/deepak
 jobs:
   docker_build_push:
     runs-on: ubuntu-latest
-    environment: grishma
+    environment: cicd/deepak
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Docker build
         run: |
           echo "Building Docker images"
-          docker build -t ${{ vars.DOCKERHUB_USERNAME_G }}/myquizapp .
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }} .
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME_G }}
-          password: ${{ secrets.DOCKERHUB_TOKEN_G }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Push Images
-        run: docker push ${{ vars.DOCKERHUB_USERNAME_G }}/myquizqpp
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
