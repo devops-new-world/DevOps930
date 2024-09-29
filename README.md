@@ -4,3 +4,4 @@
 ```bash
    mkdir -p .github/workflows
 ```
+2. Push to new origin
