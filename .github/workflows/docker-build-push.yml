@@ -4,11 +4,11 @@ on:
    branches:
      - main
      - develop
-     - sushmit1/sushmita
+     - sushmit1
 jobs:
  docker_build_push:
    runs-on: ubuntu-latest
-   environment: sushmita1/sushmita
+   environment: sushmita1
    steps:
      - name: Checkout repository
        uses: actions/checkout@v2
