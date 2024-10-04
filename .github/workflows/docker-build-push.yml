@@ -43,5 +43,9 @@ jobs:
           username: ${{ vars.REMOTE_SSH_USER }}
           password: ${{ secrets.REMOTE_SSH_USERPASS }}
           script: |
+            echo "Verifying remote user"
+            id
+            echo "login Docker hub"
+            docker login -u ${{ vars.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             docker run -d -p ${{ vars.DOCKER_PORT }}:81 ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
             docker ps
