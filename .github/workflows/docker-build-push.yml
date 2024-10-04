@@ -39,7 +39,7 @@ jobs:
       - name: Deploy Myquiz app using ssh action
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: {{ vars.REMOTE_SERVER_IP }}
+          host: ${{ vars.REMOTE_SERVER_IP }}
           username: ${{ vars.REMOTE_SSH_USER }}
           password: ${{ secrets.REMOTE_SSH_USERPASS }}
           script: |
