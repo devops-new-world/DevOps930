@@ -9,7 +9,7 @@ on:
 jobs:
   docker_build_push:
     runs-on: ubuntu-latest
-    environment: grishma
+    environment: grishmahello
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.1.0
