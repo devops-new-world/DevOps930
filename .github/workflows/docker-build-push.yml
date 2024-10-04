@@ -48,4 +48,5 @@ jobs:
             echo "login Docker hub"
             docker login -u ${{ vars.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             docker run -d -p ${{ vars.DOCKER_PORT }}:81 ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
-            docker ps
+            sleep 60
+            docker ps | grep grishma88/myquiz && echo RUNNING || echo FAILED; exit 1
