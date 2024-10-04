@@ -24,3 +24,24 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Push Images
         run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
+  deploy:
+    runs-on: ubuntu-latest
+    environment: grishma
+    needs: ["docker_build_push"]
+    steps:
+      # - name: Deploy quiz app
+      #   run: |
+      #     ssh ${{ vars.REMOTE_SSH_USER }}@${{ vars.REMOTE_SERVER_IP }} << EOF
+      #     docker run -d -p ${{ vars.DOCKER_PORT }}:80 ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
+      #     echo "Check Services..."
+      #     docker ps
+      #     EOF
+      - name: Deploy Myquiz app using ssh action
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.REMOTE_SERVER_IP }}
+          username: ${{ vars.REMOTE_SSH_USER }}
+          password: ${{ secrets.REMOTE_SSH_USERPASS }}
+          script: |
+            docker run -d -p ${{ vars.DOCKER_PORT }}:81 ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
+            docker ps
