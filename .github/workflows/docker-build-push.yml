@@ -50,4 +50,4 @@ jobs:
             docker run --name grishcicd -d -p ${{ vars.DOCKER_PORT }}:3000 ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }} 
             docker ps
             sleep 60
-            docker ps | grep grishcicd && echo RUNNING || echo FAILED; exit 1
+            docker ps | grep grishcicd && echo RUNNING || (echo FAILED; exit 1)
