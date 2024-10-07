@@ -49,4 +49,4 @@ jobs:
             docker login -u ${{ vars.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             docker run --name susovitcicd -d -p ${{ vars.DOCKER_PORT }}:3000 ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_REPO }}
             sleep 60
-            docker ps | grep susovitcicd && echo RUNNING || echo FAILED; exit 1
+            docker ps | grep susovitcicd && echo RUNNING || (echo FAILED; exit 1)
