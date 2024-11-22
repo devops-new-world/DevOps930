@@ -24,6 +24,37 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"] # Canonical
 }
+# Fetch the default security group in the VPC
+data "aws_security_group" "default" {
+  vpc_id =   data.aws_vpc.default.id
+  filter {
+    name   = "group-name"
+    values = ["default"]
+  }
+}
+# Data source to get the default VPC
+data "aws_vpc" "default" {
+  default = true  # Fetches the default VPC
+}
+# Security Group definition
+resource "aws_security_group" "dynamic_sg" {
+  name        = "dynamic-sg"
+  description = "Dynamic security group for HelloWorld project"
+  vpc_id      =  data.aws_vpc.default.id
+
+  dynamic "ingress" {
+    for_each = var.ingress_rules  # Ensure var.ingress_rules is defined as a list of maps
+    content {
+      from_port   = ingress.value["from_port"]
+      to_port     = ingress.value["to_port"]
+      protocol    = ingress.value["protocol"]
+      cidr_blocks = ingress.value["cidr_blocks"]
+    }
+  }
+
+  # Attach tags
+  tags = local.common_tags
+}
 
 
 resource "aws_instance" "web" {
