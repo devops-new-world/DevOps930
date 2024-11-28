@@ -1,0 +1,40 @@
+name: RPC Status Check
+
+on:
+  schedule:
+    - cron: '*/2 * * * *'  # Every 10 minutes
+  workflow_dispatch:        # Manual trigger
+
+jobs:
+  check-status:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check RPC Endpoints
+        id: rpc_check
+        run: |
+          declare -A endpoints
+          endpoints["icon"]="https://tt.net.solidwallet.io/jvm-rpc/api/v3"
+          endpoints["archway"]="https://tt.net.solidwallet.io/cosmwasm-rpc/"
+          endpoints["bsc"]="https://tt.net.solidwallet.io/bsc-rpc/"
+
+          statuses=""
+          for key in "${!endpoints[@]}"; do
+            status_code=$(curl -s -o /dev/null -w "%{http_code}" "${endpoints[$key]}")
+            if [[ $status_code -eq 200 ]]; then
+              statuses+="{\"name\": \"$key\", \"status\": \"up\"},"
+            else
+              statuses+="{\"name\": \"$key\", \"status\": \"down\"},"
+            fi
+          done
+
+          echo "{ \"schemaVersion\": 1, \"label\": \"RPC Status\", \"message\": \"OK\", \"color\": \"green\", \"details\": [${statuses%,}] }" > rpc_status.json
+
+      - name: Publish Status JSON
+        uses: actions/upload-artifact@v3
+        with:
+          name: rpc-status-json
+          path: rpc_status.json

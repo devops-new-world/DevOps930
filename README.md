@@ -5,3 +5,5 @@
    mkdir -p .github/workflows
 ```
 2. Push to new origin
+
+![RPC Status](https://img.shields.io/endpoint?url=https://github.com/devops-new-world/DevOps930/actions/workflows/rpc_status.yml)
